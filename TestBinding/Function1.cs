@@ -22,5 +22,16 @@ namespace TestBinding
             Product newProduct=JsonConvert.DeserializeObject<Product>(requestBody);
             return newProduct;
         }
+
+        [FunctionName("Function2")]
+        [return: Queue("testqueue", Connection = "MyAzureStorage")]
+        public static async Task<string> Run2(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+           
+            return requestBody;
+        }
     }
 }
